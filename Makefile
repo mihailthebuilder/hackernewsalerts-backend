@@ -1,6 +1,9 @@
 run:
 	python manage.py runserver
 
+run-task:
+	python manage.py qcluster
+	
 collect-static:
 	python manage.py collectstatic
 	
