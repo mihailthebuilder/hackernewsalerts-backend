@@ -4,6 +4,7 @@ from django import http
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, UTC
 from pydantic import EmailStr
+from http import HTTPStatus
 
 from .models import User
 
@@ -58,4 +59,4 @@ class UserCreate(Schema):
 def create_alert(request, payload: UserCreate):
     user = User.objects.create(**payload.dict())
     user.save()
-    return http.HttpResponse(status=202)
+    return http.HttpResponse(status=HTTPStatus.CREATED)
