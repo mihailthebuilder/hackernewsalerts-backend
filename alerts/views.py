@@ -58,4 +58,4 @@ class UserCreate(Schema):
 def create_alert(request, payload: UserCreate):
     user = User.objects.create(**payload.dict())
     user.save()
-    return 202
+    return http.HttpResponse(status=202)
