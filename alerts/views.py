@@ -1,6 +1,6 @@
 from ninja import NinjaAPI
 from ninja import Schema
-
+from django import http
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, UTC
 
@@ -21,8 +21,8 @@ def get_alerts(request, username: str):
     oldest_date_considered = (datetime.now() - timeframe).replace(tzinfo=UTC)
 
     result = get_new_post_comments(username, oldest_date_considered)
-    # if not result.user_found:
-    #     raise HTTPException(status_code=404, detail="HN username not found")
+    if not result.user_found:
+        return http.HttpResponseNotFound("HN username not found")
 
     comment_replies = get_new_comment_replies(username, oldest_date_considered)
 
