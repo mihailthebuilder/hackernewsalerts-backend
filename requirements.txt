@@ -5,6 +5,8 @@ certifi==2024.6.2
 charset-normalizer==3.3.2
 Django==5.0.6
 django-ninja==1.1.0
+django-picklefield==3.2
+django-q2==1.6.2
 dnspython==2.6.1
 email_validator==2.2.0
 idna==3.7
