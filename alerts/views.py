@@ -57,12 +57,19 @@ class UserCreate(Schema):
 
 @api.post("/alerts/users")
 def create_alert(request, payload: UserCreate):
+    if not hn_username_exists(payload.hn_username):
+        return http.HttpResponseNotFound("HN username not found")
+
     user = User.objects.create(**payload.dict())
     user.save()
 
     send_verification_email(user)
 
     return http.HttpResponse(status=HTTPStatus.CREATED)
+
+
+def hn_username_exists(username: str) -> bool:
+    return True
 
 
 def send_verification_email(user: User):
