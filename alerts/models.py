@@ -10,6 +10,7 @@ class User(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     last_checked = models.DateTimeField(default=timezone.now)
+    is_verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.hn_username
