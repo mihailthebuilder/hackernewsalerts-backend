@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,11 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-DEBUG = False if os.environ.get("SECRET_KEY") else True
+LOCAL = False if os.environ.get("SECRET_KEY") else True
+
+if LOCAL:
+    load_dotenv()
 
 SECRET_KEY = (
     "django-insecure-r2pxm67j%-g^=^evlle)5($a-hzf4ajrdnf9w3^j7j5q8$k82g"
-    if DEBUG
+    if LOCAL
     else os.environ["SECRET_KEY"]
 )
 
@@ -83,8 +87,12 @@ WSGI_APPLICATION = "socialalerts.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["DB_NAME"],
+        "USER": os.environ["DB_USER"],
+        "PASSWORD": os.environ["DB_PASSWORD"],
+        "HOST": os.environ["DB_HOST"],
+        "PORT": os.environ["DB_PORT"],
     }
 }
 

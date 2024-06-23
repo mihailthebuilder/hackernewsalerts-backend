@@ -8,8 +8,11 @@ django-ninja==1.1.0
 dnspython==2.6.1
 email_validator==2.2.0
 idna==3.7
+psycopg==3.1.19
+psycopg-binary==3.1.19
 pydantic==2.7.4
 pydantic_core==2.18.4
+python-dotenv==1.0.1
 requests==2.32.3
 soupsieve==2.5
 sqlparse==0.5.0
