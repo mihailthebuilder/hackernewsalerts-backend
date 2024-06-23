@@ -59,4 +59,11 @@ class UserCreate(Schema):
 def create_alert(request, payload: UserCreate):
     user = User.objects.create(**payload.dict())
     user.save()
+
+    send_verification_email(user)
+
     return http.HttpResponse(status=HTTPStatus.CREATED)
+
+
+def send_verification_email(user: User):
+    pass
