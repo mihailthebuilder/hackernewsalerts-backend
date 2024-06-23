@@ -3,6 +3,9 @@ from ninja import Schema
 from django import http
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, UTC
+from pydantic import EmailStr
+
+from .models import User
 
 from .hn import get_new_comment_replies, get_new_post_comments
 
@@ -46,6 +49,13 @@ def get_alerts(request, username: str):
     }
 
 
-@api.post("/alerts/users/{username}")
-def create_alert(request, username: str):
-    return
+class UserCreate(Schema):
+    hn_username: str
+    email: EmailStr
+
+
+@api.post("/alerts/users")
+def create_alert(request, payload: UserCreate):
+    user = User.objects.create(**payload.dict())
+    user.save()
+    return 202
