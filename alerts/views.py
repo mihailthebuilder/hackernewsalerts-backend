@@ -44,3 +44,8 @@ def get_alerts(request, username: str):
             for item in comment_replies
         ],
     }
+
+
+@api.post("/alerts/users/{username}")
+def create_alert(request, username: str):
+    return
