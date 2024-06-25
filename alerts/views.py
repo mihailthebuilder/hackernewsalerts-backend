@@ -9,7 +9,7 @@ import logging
 
 from .models import User
 
-from .hn import get_new_comment_replies, get_new_post_comments
+from .hn import get_new_comment_replies, get_new_post_comments, username_exists
 
 api = NinjaAPI()
 
@@ -58,7 +58,7 @@ class UserCreate(Schema):
 
 @api.post("/alerts/users")
 def create_alert(request, payload: UserCreate):
-    if not hn_username_exists(payload.hn_username):
+    if not username_exists(payload.hn_username):
         logging.info(f"username {payload.hn_username} does not exist in HN")
         return http.HttpResponseBadRequest("username does not exist in HN")
 
@@ -73,10 +73,6 @@ def create_alert(request, payload: UserCreate):
     send_verification_email(user)
 
     return http.HttpResponse(status=HTTPStatus.CREATED)
-
-
-def hn_username_exists(username: str) -> bool:
-    return True
 
 
 def send_verification_email(user: User):

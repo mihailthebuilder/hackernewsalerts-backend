@@ -42,6 +42,12 @@ class GetNewPostCommentsResult(BaseModel):
     items: list[Item]
 
 
+def username_exists(username: str):
+    posts_url = f"https://hnrss.org/submitted.jsonfeed?id={username}"
+    posts_response_json = requests.get(posts_url).json()["items"]
+    return posts_response_json is not None
+
+
 def get_new_post_comments(
     username: str, oldest_date_considered: datetime
 ) -> GetNewPostCommentsResult:
