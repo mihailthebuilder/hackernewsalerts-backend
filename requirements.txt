@@ -4,6 +4,7 @@ beautifulsoup4==4.12.3
 certifi==2024.6.2
 charset-normalizer==3.3.2
 Django==5.0.6
+django-cors-headers==4.4.0
 django-ninja==1.1.0
 django-picklefield==3.2
 django-q2==1.6.2
