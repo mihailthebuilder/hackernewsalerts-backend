@@ -1,4 +1,4 @@
-run:
+run-web:
 	python manage.py runserver
 
 run-tasks:
