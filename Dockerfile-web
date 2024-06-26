@@ -10,6 +10,24 @@ COPY requirements.txt /app/
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Run migrations
+ARG DB_HOST=${DB_HOST}
+ENV DB_HOST=${DB_HOST}
+
+ARG DB_PORT=${DB_PORT}
+ENV DB_PORT=${DB_PORT}
+
+ARG DB_NAME=${DB_NAME}
+ENV DB_NAME=${DB_NAME}
+
+ARG DB_USER=${DB_USER}
+ENV DB_USER=${DB_USER}
+
+ARG DB_PASSWORD=${DB_PASSWORD}
+ENV DB_PASSWORD=${DB_PASSWORD}
+
+RUN python manage.py migrate
+
 # Copy the rest of the application code into the container
 COPY . /app
 
