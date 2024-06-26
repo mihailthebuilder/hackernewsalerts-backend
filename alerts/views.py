@@ -8,7 +8,7 @@ from http import HTTPStatus
 import logging
 
 from .models import User
-
+from .mail import send_mail
 from .hn import get_new_comment_replies, get_new_post_comments
 
 api = NinjaAPI()
@@ -72,4 +72,4 @@ def create_alert(request, payload: UserCreate):
 
 
 def send_verification_email(user: User):
-    pass
+    send_mail()

@@ -26,10 +26,6 @@ BODY_TEXT = (
 CHARSET = "UTF-8"
 
 
-def send_verification_email(user):
-    send_mail()
-
-
 def send_mail():
 
     # Create a new SES resource and specify a region.
