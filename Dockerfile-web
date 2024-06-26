@@ -14,22 +14,22 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . /app
 
 # Run migrations
-ARG DB_HOST=${DB_HOST}
-ENV DB_HOST=${DB_HOST}
+# ARG DB_HOST=${DB_HOST}
+# ENV DB_HOST=${DB_HOST}
 
-ARG DB_PORT=${DB_PORT}
-ENV DB_PORT=${DB_PORT}
+# ARG DB_PORT=${DB_PORT}
+# ENV DB_PORT=${DB_PORT}
 
-ARG DB_NAME=${DB_NAME}
-ENV DB_NAME=${DB_NAME}
+# ARG DB_NAME=${DB_NAME}
+# ENV DB_NAME=${DB_NAME}
 
-ARG DB_USER=${DB_USER}
-ENV DB_USER=${DB_USER}
+# ARG DB_USER=${DB_USER}
+# ENV DB_USER=${DB_USER}
 
-ARG DB_PASSWORD=${DB_PASSWORD}
-ENV DB_PASSWORD=${DB_PASSWORD}
+# ARG DB_PASSWORD=${DB_PASSWORD}
+# ENV DB_PASSWORD=${DB_PASSWORD}
 
-RUN python manage.py migrate
+# RUN python manage.py migrate
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
