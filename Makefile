@@ -26,4 +26,4 @@ docker-build-web:
 	docker build -f ./Dockerfile-web -t social-alerts .
 
 docker-run-web:
-	docker run -d -p 8000:8000 social-alerts
+	docker run -d -p 8000:8000 --env-file ./.env social-alerts
