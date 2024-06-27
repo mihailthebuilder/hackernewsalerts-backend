@@ -13,24 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . /app
 
-# Run migrations
-# ARG DB_HOST=${DB_HOST}
-# ENV DB_HOST=${DB_HOST}
-
-# ARG DB_PORT=${DB_PORT}
-# ENV DB_PORT=${DB_PORT}
-
-# ARG DB_NAME=${DB_NAME}
-# ENV DB_NAME=${DB_NAME}
-
-# ARG DB_USER=${DB_USER}
-# ENV DB_USER=${DB_USER}
-
-# ARG DB_PASSWORD=${DB_PASSWORD}
-# ENV DB_PASSWORD=${DB_PASSWORD}
-
-# RUN python manage.py migrate
-
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
@@ -38,4 +20,4 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 
 # Run the command to start Gunicorn server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "socialalerts.wsgi:application"]
+CMD ["sh", "./run-web.sh"]

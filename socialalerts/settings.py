@@ -36,12 +36,23 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "hackernewsalerts.com", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "hackernewsalerts.com",
+    "127.0.0.1",
+    "hna.app.taralys.com",
+]
 
 CORS_ALLOWED_ORIGINS = [
     "https://hackernewsalerts.com",
     "http://localhost:4321",
     "http://127.0.0.1:8000",
+    "https://hna.app.taralys.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://hackernewsalerts.com",
+    "https://hna.app.taralys.com",
 ]
 
 # Application definition
@@ -60,6 +71,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -139,7 +151,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+
+STATIC_ROOT = "staticfiles/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
