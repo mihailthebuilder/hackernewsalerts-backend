@@ -36,12 +36,18 @@ SECRET_KEY = (
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost", "hackernewsalerts.com", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "hackernewsalerts.com",
+    "127.0.0.1",
+    "hna.app.taralys.com",
+]
 
 CORS_ALLOWED_ORIGINS = [
     "https://hackernewsalerts.com",
     "http://localhost:4321",
     "http://127.0.0.1:8000",
+    "https://hna.app.taralys.com",
 ]
 
 # Application definition
