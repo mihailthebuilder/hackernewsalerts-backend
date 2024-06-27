@@ -50,6 +50,11 @@ CORS_ALLOWED_ORIGINS = [
     "https://hna.app.taralys.com",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://hackernewsalerts.com",
+    "https://hna.app.taralys.com",
+]
+
 # Application definition
 
 INSTALLED_APPS = [
