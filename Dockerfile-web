@@ -38,4 +38,4 @@ EXPOSE 8000
 ENV PYTHONUNBUFFERED 1
 
 # Run the command to start Gunicorn server
-CMD ["sh", "./run-web.sh"]
+CMD ["sh", "./run-server.sh"]
