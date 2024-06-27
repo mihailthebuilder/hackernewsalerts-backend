@@ -4,9 +4,6 @@ run-web:
 run-tasks:
 	python manage.py qcluster
 
-run-local-postgres:
-	docker run --name postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
-	
 makemigrations:
 	python manage.py makemigrations
 
@@ -19,9 +16,6 @@ create-superuser:
 collect-static:
 	python manage.py collectstatic
 	
-run-prod-web:
-	SECRET_KEY=test python manage.py runserver
-
 docker-build-web:
 	docker build -f ./Dockerfile-web -t social-alerts .
 
