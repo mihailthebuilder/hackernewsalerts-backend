@@ -1,3 +1,4 @@
-from django.test import TestCase
+from django.core.signing import Signer
 
-# Create your tests here.
+signer = Signer()
+
