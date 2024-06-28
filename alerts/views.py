@@ -73,6 +73,8 @@ def create_alert(request, payload: UserCreate):
 
     return http.HttpResponse(status=HTTPStatus.CREATED)
 
+@api.post("")
+
 
 def send_verification_email(user: User):
     to = user.email
