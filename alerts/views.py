@@ -10,10 +10,11 @@ import logging
 from .models import User
 from .mail import send_mail
 from .hn import get_new_comment_replies, get_new_post_comments
-from django.core.signing import Signer
+from django.core import signing
 import os
 
 api = NinjaAPI()
+signer = signing.Signer(sep="+")
 
 
 class RenderedItem(Schema):
@@ -22,7 +23,7 @@ class RenderedItem(Schema):
     date: str
 
 
-@api.get("/alerts/users/{username}")
+@api.get("/alerts/{username}")
 def get_alerts(request, username: str):
     timeframe = timedelta(days=1)
     oldest_date_considered = (datetime.now() - timeframe).replace(tzinfo=UTC)
@@ -73,16 +74,28 @@ def create_alert(request, payload: UserCreate):
 
     return http.HttpResponse(status=HTTPStatus.CREATED)
 
-@api.post("")
-
 
 def send_verification_email(user: User):
-    to = user.email
-
-    signer = Signer()
-    verification_code = signer.sign(to)
-    verification_link = f"{os.environ["WEB_URL"]}/verify/{verification_code}"
+    verification_code = signer.sign(user.hn_username)
+    verification_link = f"{os.environ["UI_URL"]}?verificationCode={verification_code}"
     content = f"Thank you for singing up to hackernewsalerts.com! Please verify your email address by clicking the link below: {verification_link}"
 
     subject = "Verify your email for hackernewsalerts.com"
-    send_mail(to=to, subject=subject, content=content)
+    send_mail(to=user.email, subject=subject, content=content)
+
+@api.post("/verify/{code}")
+def verify_email(request, code: str):
+    try:
+        hn_username = signer.unsign(code)
+    except signing.BadSignature:
+        return http.HttpResponseBadRequest("invalid code")
+    
+    try:
+        user = User.objects.get(hn_username=hn_username)
+    except User.DoesNotExist:
+        return http.HttpResponseNotFound()
+    
+    user.is_verified = True
+    user.save()
+
+    return http.HttpResponse(status=HTTPStatus.OK)
