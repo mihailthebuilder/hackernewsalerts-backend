@@ -10,6 +10,8 @@ django-cors-headers==4.4.0
 django-ninja==1.2.0
 django-picklefield==3.2
 django-q2==1.6.2
+dnspython==2.6.1
+email_validator==2.2.0
 gunicorn==22.0.0
 idna==3.7
 jmespath==1.0.1
