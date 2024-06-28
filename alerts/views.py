@@ -10,6 +10,8 @@ import logging
 from .models import User
 from .mail import send_mail
 from .hn import get_new_comment_replies, get_new_post_comments
+from django.core.signing import Signer
+import os
 
 api = NinjaAPI()
 
@@ -56,7 +58,7 @@ class UserCreate(Schema):
     email: EmailStr
 
 
-@api.post("/alerts/users")
+@api.post("/signup")
 def create_alert(request, payload: UserCreate):
     existing_user = User.objects.filter(hn_username=payload.hn_username).first()
     if existing_user is not None:
@@ -64,12 +66,21 @@ def create_alert(request, payload: UserCreate):
         return http.HttpResponseBadRequest("alert already set up for HN username")
 
     user = User.objects.create(**payload.dict())
-    user.save()
 
     send_verification_email(user)
+
+    user.save()
 
     return http.HttpResponse(status=HTTPStatus.CREATED)
 
 
 def send_verification_email(user: User):
-    send_mail()
+    to = user.email
+
+    signer = Signer()
+    verification_code = signer.sign(to)
+    verification_link = f"{os.environ["WEB_URL"]}/verify/{verification_code}"
+    content = f"Thank you for singing up to hackernewsalerts.com! Please verify your email address by clicking the link below: {verification_link}"
+
+    subject = "Verify your email for hackernewsalerts.com"
+    send_mail(to=to, subject=subject, content=content)
