@@ -11,7 +11,7 @@ from django.core import signing
 import os
 
 api = NinjaAPI()
-signer = signing.Signer(sep="+")
+signer = signing.Signer(sep="$")
 
 
 class RenderedItem(Schema):
