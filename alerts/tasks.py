@@ -1,17 +1,18 @@
-from .models import User
-from .hn import get_new_comment_replies, get_new_post_comments
+from . import models, hn
+from django.contrib.auth.models import User
+
 from django.utils import timezone
-import os
+import logging
 
 
 def send_alerts():
     try:
-        users = User.objects.filter(is_verified=True)
+        users = models.User.objects.filter(is_verified=True)
         for user in users:
-            post_comments = get_new_post_comments(
+            post_comments = hn.get_new_post_comments(
                 user.hn_username, user.last_checked
             ).items
-            comment_replies = get_new_comment_replies(
+            comment_replies = hn.get_new_comment_replies(
                 user.hn_username, user.last_checked
             )
             now = timezone.now()
@@ -23,9 +24,11 @@ def send_alerts():
             user.last_checked = now
             user.save()
     except Exception as e:
-        content = "Error in alerts"
-        send_email(os.environ["ERROR_ALERTS_TO"], content)
-        raise e
+        content = f"Error in alerts: {e}"
+        logging.error(content)
+
+        admin = User.objects.get(is_superuser=True)
+        send_email(admin.email, content)
 
 
 def send_email(to: str, content: str):
