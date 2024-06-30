@@ -35,6 +35,14 @@ def send_alerts():
                             content + utils.html_to_str(comment.content_html) + "\n\n"
                         )
 
+                    content += "\n\n\n"
+
+                if len(comment_replies) > 0:
+                    content = (
+                        content
+                        + f"You have {len(comment_replies)} new replies to your comments:\n\n"
+                    )
+
                     for reply in comment_replies:
                         date = utils.format_date(reply.date_published)
                         url = f"https://news.ycombinator.com/item?id={reply.id}"
