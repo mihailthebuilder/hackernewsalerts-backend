@@ -18,6 +18,7 @@ def send_alerts():
             now = timezone.now()
 
             if len(post_comments) + len(comment_replies) > 0:
+                print(f"Preparing to send email to {user.hn_username}")
                 content = ""
 
                 if len(post_comments) > 0:
@@ -30,7 +31,7 @@ def send_alerts():
                         date = utils.format_date(comment.date_published)
                         url = f"https://news.ycombinator.com/item?id={comment.id}"
 
-                        content = content + f"{date} - {comment.author} - {url}\n"
+                        content = content + f"{date} - {comment.author.name} - {url}\n"
                         content = (
                             content + utils.html_to_str(comment.content_html) + "\n\n"
                         )
@@ -47,7 +48,7 @@ def send_alerts():
                         date = utils.format_date(reply.date_published)
                         url = f"https://news.ycombinator.com/item?id={reply.id}"
 
-                        content = content + f"{date} - {reply.author} - {url}\n"
+                        content = content + f"{date} - {reply.author.name} - {url}\n"
                         content = (
                             content + utils.html_to_str(reply.content_html) + "\n\n"
                         )
