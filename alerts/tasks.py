@@ -29,9 +29,11 @@ def send_alerts():
 
                     for comment in post_comments:
                         date = utils.format_date(comment.date_published)
-                        url = f"https://news.ycombinator.com/item?id={comment.id}"
 
-                        content = content + f"{date} - {comment.author.name} - {url}\n"
+                        content = (
+                            content
+                            + f"{date} - {comment.author.name} - {comment.external_url}\n"
+                        )
                         content = (
                             content + utils.html_to_str(comment.content_html) + "\n\n"
                         )
@@ -46,9 +48,11 @@ def send_alerts():
 
                     for reply in comment_replies:
                         date = utils.format_date(reply.date_published)
-                        url = f"https://news.ycombinator.com/item?id={reply.id}"
 
-                        content = content + f"{date} - {reply.author.name} - {url}\n"
+                        content = (
+                            content
+                            + f"{date} - {reply.author.name} - {reply.external_url}\n"
+                        )
                         content = (
                             content + utils.html_to_str(reply.content_html) + "\n\n"
                         )
