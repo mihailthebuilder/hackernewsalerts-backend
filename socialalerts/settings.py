@@ -34,13 +34,14 @@ SECRET_KEY = (
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = LOCAL
 
 ALLOWED_HOSTS = [
     "localhost",
     "hackernewsalerts.com",
     "127.0.0.1",
     "hna.app.taralys.com",
+    "*.social-alerts-frontend.pages.dev",
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -48,11 +49,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:4321",
     "http://127.0.0.1:8000",
     "https://hna.app.taralys.com",
+    "https://*.social-alerts-frontend.pages.dev",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://hackernewsalerts.com",
     "https://hna.app.taralys.com",
+    "https://*.social-alerts-frontend.pages.dev",
 ]
 
 # Application definition
