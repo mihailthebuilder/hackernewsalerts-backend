@@ -17,14 +17,22 @@ def send_alerts():
             )
             now = timezone.now()
 
-            if len(post_comments) + len(comment_replies) > 0:
+            len_post_comments = len(post_comments)
+            len_comment_replies = len(comment_replies)
+
+            if len_post_comments + len_comment_replies > 0:
                 print(f"Preparing to send email to {user.hn_username}")
                 content = ""
+                subject = ""
 
-                if len(post_comments) > 0:
+                if len_post_comments > 0:
+                    comment_word = "comment" if len_post_comments == 1 else "comments"
+
+                    subject = f"{len_post_comments} {comment_word}"
+
                     content = (
                         content
-                        + f"You have {len(post_comments)} new comments to your posts:\n\n"
+                        + f"You have {len_post_comments} new {comment_word} to your posts:\n\n"
                     )
 
                     for comment in post_comments:
@@ -32,18 +40,23 @@ def send_alerts():
 
                         content = (
                             content
-                            + f"{date} - {comment.author.name} - {comment.external_url}\n"
+                            + f"{date} - {comment.author.name} - {comment.external_url}"
                         )
                         content = (
                             content + utils.html_to_str(comment.content_html) + "\n\n"
                         )
 
-                    content += "\n\n\n"
+                if len_comment_replies > 0:
+                    reply_word = "reply" if len_comment_replies == 1 else "replies"
 
-                if len(comment_replies) > 0:
+                    if len_post_comments > 0:
+                        subject += " / "
+
+                    subject += f"{len_comment_replies} {reply_word}"
+
                     content = (
                         content
-                        + f"You have {len(comment_replies)} new replies to your comments:\n\n"
+                        + f"You have {len_comment_replies} new {reply_word} to your comments:\n\n"
                     )
 
                     for reply in comment_replies:
@@ -51,13 +64,13 @@ def send_alerts():
 
                         content = (
                             content
-                            + f"{date} - {reply.author.name} - {reply.external_url}\n"
+                            + f"{date} - {reply.author.name} - {reply.external_url}"
                         )
                         content = (
                             content + utils.html_to_str(reply.content_html) + "\n\n"
                         )
 
-                subject = "New comments/replies on Hacker News"
+                subject += f" - {utils.format_date(now)}"
                 mail.send_mail(user.email, subject, content)
 
             user.last_checked = now
