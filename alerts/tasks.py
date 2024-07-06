@@ -43,7 +43,7 @@ def send_alerts():
                             + f"{date} - {comment.author.name} - {comment.external_url}"
                         )
                         content = (
-                            content + utils.html_to_str(comment.content_html) + "\n\n"
+                            content + utils.html_to_str(comment.content_html) + "\n"
                         )
 
                 if len_comment_replies > 0:
@@ -66,9 +66,7 @@ def send_alerts():
                             content
                             + f"{date} - {reply.author.name} - {reply.external_url}"
                         )
-                        content = (
-                            content + utils.html_to_str(reply.content_html) + "\n\n"
-                        )
+                        content = content + utils.html_to_str(reply.content_html) + "\n"
 
                 subject += f" - {utils.format_date(now)}"
                 mail.send_mail(user.email, subject, content)
