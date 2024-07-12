@@ -21,3 +21,6 @@ docker-build-web:
 
 docker-run-web:
 	docker run -d -p 8000:8000 --env-file ./.env social-alerts
+
+test:
+	python manage.py test

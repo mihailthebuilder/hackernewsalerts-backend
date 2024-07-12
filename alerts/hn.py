@@ -26,6 +26,9 @@ def get_new_comment_replies(
     replies_url = f"https://hnrss.org/replies.jsonfeed?id={username}"
     replies_response_json = requests.get(replies_url).json()["items"]
 
+    if replies_response_json == None:
+        return []
+
     replies = [Item(**reply) for reply in replies_response_json]
     filtered_replies = [
         reply
