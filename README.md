@@ -2,6 +2,8 @@
 
 The backend services for [hackernewsalerts.com](https://hackernewsalerts.com). A web application that sends email notifications when someone replies to one of your comments or posts on Hacker News.
 
+[Link to the frontend](https://github.com/mihailthebuilder/hackernewsalerts-frontend).
+
 ## Architecture
 
 I run 2 Python Django services:
