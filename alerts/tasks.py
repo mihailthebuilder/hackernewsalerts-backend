@@ -77,6 +77,12 @@ def process_user(user: models.User):
                 content = content + utils.html_to_str(reply.content_html) + "\n"
 
         subject += f" - {utils.format_date(now)}"
+        content = (
+            content
+            + "\n\n"
+            + "Want to unsubscribe? Just reply to this email to let us know."
+        )
+
         mail.send_mail(user.email, subject, content)
 
     user.last_checked = now
