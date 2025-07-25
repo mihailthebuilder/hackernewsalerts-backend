@@ -33,7 +33,9 @@ def process_user(user: models.User):
     len_comment_replies = len(comment_replies)
 
     if len_post_comments + len_comment_replies > 0:
-        print(f"Preparing to send email to {user.hn_username}")
+        print(
+            f"Preparing to send email to {user.hn_username}; {len_post_comments} post comments; {len_comment_replies} comment replies"
+        )
         content = ""
         subject = ""
 
