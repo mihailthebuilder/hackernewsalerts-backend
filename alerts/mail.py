@@ -44,5 +44,4 @@ def send_mail(to: str, subject: str, content: str):
     except ClientError as e:
         print(e.response["Error"]["Message"])
     else:
-        print("Email sent! Message ID:"),
-        print(response["MessageId"])
+        print(f"Email sent! Message ID: {response["MessageId"]}")
