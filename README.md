@@ -18,10 +18,6 @@ Both services use the same Postgres database backend, and are deployed with [Cap
 
 See [Makefile](./Makefile)
 
-## TODO
-
-- `ALLOWED_HOSTS` and `CORS_ALLOWED_ORIGINS` in prod should only allow for frontend prod
-
 ## Notes
 
 The scheduled worker sends email alerts to the admin user every time there's a failure. I sometimes get these alerts because of
