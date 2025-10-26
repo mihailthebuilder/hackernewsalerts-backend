@@ -37,7 +37,7 @@ def send_verification_email(user: models.User):
     verification_code = signer.sign(user.hn_username)
     ui_url = os.environ["UI_URL"]
     verification_link = f"{ui_url}?verificationCode={verification_code}"
-    content = f"Thank you for singing up to hackernewsalerts.com! Please verify your email address by clicking the link below: {verification_link}"
+    content = f"Thank you for signing up to hackernewsalerts.com! Please verify your email address by clicking the link below: {verification_link}"
 
     subject = "Verify your email for hackernewsalerts.com"
     mail.send_mail(to=user.email, subject=subject, content=content)
