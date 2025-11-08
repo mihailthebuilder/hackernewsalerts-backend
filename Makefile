@@ -24,3 +24,6 @@ docker-run-web:
 
 test:
 	python manage.py test
+
+deploy-web:
+	caprover deploy -c ./captain-definition-web.json
