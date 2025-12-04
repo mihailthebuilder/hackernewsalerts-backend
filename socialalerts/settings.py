@@ -42,6 +42,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "hna.app.taralys.com",
     "*.social-alerts-frontend.pages.dev",
+    "api.hackernewsalerts.com",
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -56,6 +57,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://hackernewsalerts.com",
     "https://hna.app.taralys.com",
     "https://*.social-alerts-frontend.pages.dev",
+    "https://api.hackernewsalerts.com",
 ]
 
 # Application definition
