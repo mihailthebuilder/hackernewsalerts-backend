@@ -27,3 +27,6 @@ test:
 
 deploy-web:
 	caprover deploy -c ./captain-definition-web.json
+
+deploy-tasks:
+	caprover deploy -c ./captain-definition-tasks.json
