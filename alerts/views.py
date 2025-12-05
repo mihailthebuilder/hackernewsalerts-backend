@@ -3,8 +3,12 @@ from django import http
 from pydantic import EmailStr
 from http import HTTPStatus
 import logging
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.html import escape
 
-from . import mail, models
+from . import mail, models, utils
 from django.core import signing
 import os
 
@@ -59,3 +63,44 @@ def verify_email(request, code: str):
     user.save()
 
     return http.HttpResponse(status=HTTPStatus.OK)
+
+
+@api.get("/unsubscribe/")
+def unsubscribe_preview(request, token: str):
+    try:
+        utils.UnsubscribeSigner().read_token(token)  # validate only
+    except signing.BadSignature:
+        return HttpResponse("Invalid unsubscribe link.", status=400)
+
+    safe_token = escape(token)
+
+    return HttpResponse(
+        f"""
+        <html>
+            <body style="font-family: sans-serif; padding: 40px;">
+                <h2>Confirm Unsubscribe?</h2>
+
+                <form method="post" action="/api/unsubscribe/confirm/?token={safe_token}">
+                    <button type="submit">
+                        Yes, unsubscribe me
+                    </button>
+                </form>
+            </body>
+        </html>
+    """
+    )
+
+
+@csrf_exempt
+@api.post("/unsubscribe/confirm/")
+def unsubscribe_confirm(request, token: str):
+    try:
+        username = utils.UnsubscribeSigner().read_token(token)
+    except signing.BadSignature:
+        return HttpResponse("Invalid unsubscribe link.", status=400)
+
+    user = get_object_or_404(models.User, hn_username=username)
+    user.delete()
+
+    logging.info(f"User {username} unsubscribed.")
+    return HttpResponse("You have been permanently unsubscribed.")

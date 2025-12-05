@@ -1,3 +1,8 @@
+ifneq (,$(wildcard .env))
+include .env
+export
+endif
+
 run-web:
 	python manage.py runserver
 
@@ -26,7 +31,7 @@ test:
 	python manage.py test
 
 deploy-web:
-	caprover deploy -c ./captain-definition-web.json
+	caprover deploy -c ./captain-definition-web.json -a $(CAPROVER_APP_WEB) -n $(CAPROVER_NODE) -b $(BRANCH)
 
 deploy-tasks:
-	caprover deploy -c ./captain-definition-tasks.json
+	caprover deploy -c ./captain-definition-tasks.json -a $(CAPROVER_APP_TASKS) -n $(CAPROVER_NODE) -b $(BRANCH)

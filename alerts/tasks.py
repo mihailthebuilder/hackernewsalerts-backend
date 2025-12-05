@@ -1,6 +1,6 @@
 from . import models, hn, mail, utils
 from django.contrib.auth import models as admin_models
-import traceback
+import traceback, os
 
 from django.utils import timezone
 import logging
@@ -79,10 +79,14 @@ def process_user(user: models.User):
                 content = content + utils.html_to_str(reply.content_html) + "\n"
 
         subject += f" - {utils.format_date(now)}"
+
+        token = utils.UnsubscribeSigner().make_token(user.hn_username)
+        unsubscribe_link = f"{os.environ["API_URL"]}/api/unsubscribe/?token={token}"
+
         content = (
             content
             + "\n\n"
-            + "Want to unsubscribe? Just reply to this email to let us know."
+            + f"Want to unsubscribe? Click this link {unsubscribe_link}."
         )
 
         mail.send_mail(user.email, subject, content)
