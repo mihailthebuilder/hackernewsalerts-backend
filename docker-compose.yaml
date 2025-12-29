@@ -4,8 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile-web
     container_name: django_web
-    ports:
-      - "8000:8000"
     restart: unless-stopped
 
   worker:
