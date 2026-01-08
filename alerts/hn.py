@@ -1,7 +1,7 @@
 import requests
 from datetime import UTC, datetime, timedelta
 from pydantic import BaseModel
-
+import os
 from urllib.parse import urlparse, parse_qs
 
 
@@ -20,10 +20,13 @@ class Item(BaseModel):
     author: ItemAuthor
 
 
+PROXY_HOSTNAME = os.environ["PROXY_HOSTNAME"]
+
+
 def get_new_comment_replies(
     username: str, oldest_date_considered: datetime
 ) -> list[Item]:
-    replies_url = f"https://hnrss.org/replies.jsonfeed?id={username}"
+    replies_url = f"https://{PROXY_HOSTNAME}/replies.jsonfeed?id={username}"
     replies_response_json = requests.get(replies_url).json()["items"]
 
     if replies_response_json == None:
@@ -49,7 +52,7 @@ def get_new_post_comments(
     username: str, oldest_date_considered: datetime
 ) -> GetNewPostCommentsResult:
 
-    posts_url = f"https://hnrss.org/submitted.jsonfeed?id={username}"
+    posts_url = f"https://{PROXY_HOSTNAME}/submitted.jsonfeed?id={username}"
     posts_response_json = requests.get(posts_url).json()["items"]
 
     result = GetNewPostCommentsResult(user_found=False, items=[])
