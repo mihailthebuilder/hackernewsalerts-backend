@@ -73,7 +73,7 @@ def get_new_post_comments(
         query_params = parse_qs(parsed_url.query)
         post_id = query_params["id"][0]
 
-        comments_url = f"https://hnrss.org/item.jsonfeed?id={post_id}"
+        comments_url = f"https://{PROXY_HOSTNAME}/item.jsonfeed?id={post_id}"
         comments_response_json = requests.get(comments_url).json()["items"]
 
         if comments_response_json is None:
