@@ -43,19 +43,28 @@ def get_new_comment_replies(
     return filtered_replies
 
 
+class PostComments(BaseModel):
+    post_id: str
+    post_title: str
+    post_url: str
+    comments: list[Item]
+
+
 class GetNewPostCommentsResult(BaseModel):
     user_found: bool
-    items: list[Item]
+    posts: list[PostComments]
 
 
 def get_new_post_comments(
-    username: str, oldest_date_considered: datetime
+    username: str,
+    oldest_date_considered: datetime,
+    muted_post_ids: frozenset[str] = frozenset(),
 ) -> GetNewPostCommentsResult:
 
     posts_url = f"https://{PROXY_HOSTNAME}/submitted.jsonfeed?id={username}"
     posts_response_json = requests.get(posts_url).json()["items"]
 
-    result = GetNewPostCommentsResult(user_found=False, items=[])
+    result = GetNewPostCommentsResult(user_found=False, posts=[])
 
     if posts_response_json == None:
         return result
@@ -73,6 +82,9 @@ def get_new_post_comments(
         query_params = parse_qs(parsed_url.query)
         post_id = query_params["id"][0]
 
+        if post_id in muted_post_ids:
+            continue
+
         comments_url = f"https://{PROXY_HOSTNAME}/item.jsonfeed?id={post_id}"
         comments_response_json = requests.get(comments_url).json()["items"]
 
@@ -88,6 +100,14 @@ def get_new_post_comments(
             and comment.date_published > oldest_date_considered
         ]
 
-        result.items = result.items + filtered_comments
+        if filtered_comments:
+            result.posts.append(
+                PostComments(
+                    post_id=post_id,
+                    post_title=post.title,
+                    post_url=post.external_url,
+                    comments=filtered_comments,
+                )
+            )
 
     return result

@@ -14,3 +14,17 @@ class User(models.Model):
 
     def __str__(self):
         return self.hn_username
+
+
+class MutedPost(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="muted_posts"
+    )
+    post_id = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "post_id")
+
+    def __str__(self):
+        return f"{self.user.hn_username} muted {self.post_id}"

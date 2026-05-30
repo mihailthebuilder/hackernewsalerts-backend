@@ -104,3 +104,44 @@ def unsubscribe_confirm(request, token: str):
 
     logging.info(f"User {username} unsubscribed.")
     return HttpResponse("You have been permanently unsubscribed.")
+
+
+@api.get("/unsubscribe/post/")
+def unsubscribe_post_preview(request, token: str):
+    try:
+        utils.PostUnsubscribeSigner().read_token(token)  # validate only
+    except signing.BadSignature:
+        return HttpResponse("Invalid unsubscribe link.", status=400)
+
+    safe_token = escape(token)
+
+    return HttpResponse(
+        f"""
+        <html>
+            <body style="font-family: sans-serif; padding: 40px;">
+                <h2>Stop alerts for this post?</h2>
+
+                <form method="post" action="/api/unsubscribe/post/confirm/?token={safe_token}">
+                    <button type="submit">
+                        Yes, stop alerts for this post
+                    </button>
+                </form>
+            </body>
+        </html>
+    """
+    )
+
+
+@csrf_exempt
+@api.post("/unsubscribe/post/confirm/")
+def unsubscribe_post_confirm(request, token: str):
+    try:
+        username, post_id = utils.PostUnsubscribeSigner().read_token(token)
+    except signing.BadSignature:
+        return HttpResponse("Invalid unsubscribe link.", status=400)
+
+    user = get_object_or_404(models.User, hn_username=username)
+    models.MutedPost.objects.get_or_create(user=user, post_id=post_id)
+
+    logging.info(f"User {username} muted post {post_id}.")
+    return HttpResponse("You will no longer receive alerts for this post.")

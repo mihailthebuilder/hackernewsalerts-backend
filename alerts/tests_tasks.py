@@ -9,7 +9,7 @@ class HnGetNewCommentReplies(TestCase):
     def test_user(self):
 
         if os.environ["TEST_RUN_TASK"] == "1":
-            user = models.User(
+            user = models.User.objects.create(
                 hn_username=os.environ["TEST_HN_USERNAME"],
                 email=os.environ["TEST_USER_EMAIL"],
                 is_verified=True,

@@ -25,11 +25,16 @@ def check_for_alerts():
 
 
 def process_user(user: models.User):
-    post_comments = hn.get_new_post_comments(user.hn_username, user.last_checked).items
+    muted = frozenset(
+        models.MutedPost.objects.filter(user=user).values_list("post_id", flat=True)
+    )
+    post_result = hn.get_new_post_comments(
+        user.hn_username, user.last_checked, muted
+    )
     comment_replies = hn.get_new_comment_replies(user.hn_username, user.last_checked)
     now = timezone.now()
 
-    len_post_comments = len(post_comments)
+    len_post_comments = sum(len(pc.comments) for pc in post_result.posts)
     len_comment_replies = len(comment_replies)
 
     if len_post_comments + len_comment_replies > 0:
@@ -49,13 +54,29 @@ def process_user(user: models.User):
                 + f"You have {len_post_comments} new {comment_word} to your posts:\n\n"
             )
 
-            for comment in post_comments:
-                date = utils.format_date(comment.date_published)
+            for post in post_result.posts:
+                token = utils.PostUnsubscribeSigner().make_token(
+                    user.hn_username, post.post_id
+                )
+                mute_link = (
+                    f"{os.environ["API_URL"]}/api/unsubscribe/post/?token={token}"
+                )
 
                 content = (
-                    content + f"{date} - {comment.author.name} - {comment.external_url}"
+                    content
+                    + f"{post.post_title} ({post.post_url}) - stop alerts for this post: {mute_link}\n"
                 )
-                content = content + utils.html_to_str(comment.content_html) + "\n"
+
+                for comment in post.comments:
+                    date = utils.format_date(comment.date_published)
+
+                    content = (
+                        content
+                        + f"{date} - {comment.author.name} - {comment.external_url}"
+                    )
+                    content = content + utils.html_to_str(comment.content_html) + "\n"
+
+                content = content + "\n"
 
         if len_comment_replies > 0:
             reply_word = "reply" if len_comment_replies == 1 else "replies"

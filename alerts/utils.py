@@ -22,3 +22,14 @@ class UnsubscribeSigner:
 
     def read_token(self, token: str) -> str:
         return self.signer.unsign(token)
+
+
+class PostUnsubscribeSigner:
+    SALT = "post-unsubscribe-salt"
+
+    def make_token(self, username: str, post_id: str) -> str:
+        return signing.dumps({"u": username, "p": post_id}, salt=self.SALT)
+
+    def read_token(self, token: str) -> tuple[str, str]:
+        data = signing.loads(token, salt=self.SALT)
+        return data["u"], data["p"]
